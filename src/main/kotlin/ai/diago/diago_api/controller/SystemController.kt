@@ -1,5 +1,8 @@
-package ai.diago.diago_api.system
+package ai.diago.diago_api.controller
 
+import ai.diago.diago_api.controller.dto.CreateSystemRequest
+import ai.diago.diago_api.controller.dto.SystemResponse
+import ai.diago.diago_api.controller.dto.SystemService
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.PostMapping

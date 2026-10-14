@@ -1,4 +1,4 @@
-package ai.diago.diago_api.system
+package ai.diago.diago_api.controller.dto
 
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Size
