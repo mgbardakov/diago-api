@@ -1,0 +1,190 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-create-architecture-tables
+      author: diago
+      changes:
+        - createTable:
+            tableName: system
+            columns:
+              - column:
+                  name: id
+                  type: serial
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(128)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: varchar(32)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp with time zone
+                  defaultValueComputed: current_timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp with time zone
+                  defaultValueComputed: current_timestamp
+                  constraints:
+                    nullable: false
+        - addUniqueConstraint:
+            tableName: system
+            columnNames: name
+            constraintName: system_name_unique
+
+        - createTable:
+            tableName: node
+            columns:
+              - column:
+                  name: id
+                  type: serial
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: system_id
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(128)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: kind
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: varchar(32)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp with time zone
+                  defaultValueComputed: current_timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp with time zone
+                  defaultValueComputed: current_timestamp
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: node
+            baseColumnNames: system_id
+            constraintName: node_system_fk
+            referencedTableName: system
+            referencedColumnNames: id
+            onDelete: CASCADE
+        - addUniqueConstraint:
+            tableName: node
+            columnNames: system_id, name
+            constraintName: node_system_name_unique
+        - addUniqueConstraint:
+            tableName: node
+            columnNames: system_id, id
+            constraintName: node_system_id_unique
+        - createIndex:
+            tableName: node
+            indexName: node_system_id_idx
+            columns:
+              - column:
+                  name: system_id
+
+        - createTable:
+            tableName: relation
+            columns:
+              - column:
+                  name: id
+                  type: serial
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: system_id
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: from_node_id
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: to_node_id
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: kind
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: details
+                  type: jsonb
+                  defaultValueComputed: "'{}'::jsonb"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp with time zone
+                  defaultValueComputed: current_timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp with time zone
+                  defaultValueComputed: current_timestamp
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: relation
+            baseColumnNames: system_id
+            constraintName: relation_system_fk
+            referencedTableName: system
+            referencedColumnNames: id
+            onDelete: CASCADE
+        - addForeignKeyConstraint:
+            baseTableName: relation
+            baseColumnNames: system_id, from_node_id
+            constraintName: relation_from_node_fk
+            referencedTableName: node
+            referencedColumnNames: system_id, id
+            onDelete: CASCADE
+        - addForeignKeyConstraint:
+            baseTableName: relation
+            baseColumnNames: system_id, to_node_id
+            constraintName: relation_to_node_fk
+            referencedTableName: node
+            referencedColumnNames: system_id, id
+            onDelete: CASCADE
+        - createIndex:
+            tableName: relation
+            indexName: relation_system_id_idx
+            columns:
+              - column:
+                  name: system_id
+        - createIndex:
+            tableName: relation
+            indexName: relation_from_node_id_idx
+            columns:
+              - column:
+                  name: from_node_id
+        - createIndex:
+            tableName: relation
+            indexName: relation_to_node_id_idx
+            columns:
+              - column:
+                  name: to_node_id
