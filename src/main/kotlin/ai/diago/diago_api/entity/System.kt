@@ -2,6 +2,8 @@ package ai.diago.diago_api.entity
 
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
@@ -20,7 +22,8 @@ class System(
 
     var name: String = "",
 
-    var status: String = "DRAFT",
+    @Enumerated(EnumType.STRING)
+    var status: SystemStatus = SystemStatus.PENDING,
 
     @CreationTimestamp
     var createdAt: OffsetDateTime? = null,

@@ -1,6 +1,8 @@
 package ai.diago.diago_api.entity
 
 import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
 import jakarta.persistence.FetchType
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
@@ -22,7 +24,8 @@ class Node(
 
     var kind: String = "",
 
-    var status: String = "PENDING",
+    @Enumerated(EnumType.STRING)
+    var status: NodeStatus = NodeStatus.PENDING,
 
     @CreationTimestamp
     var createdAt: OffsetDateTime? = null,
