@@ -10,7 +10,11 @@ import jakarta.persistence.Id
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 import org.hibernate.annotations.CreationTimestamp
+import org.hibernate.annotations.JdbcTypeCode
 import org.hibernate.annotations.UpdateTimestamp
+import org.hibernate.type.SqlTypes
+import tools.jackson.databind.JsonNode
+import tools.jackson.databind.node.JsonNodeFactory
 import java.time.OffsetDateTime
 
 @Entity
@@ -24,6 +28,9 @@ class Node(
 
     @Enumerated(EnumType.STRING)
     var kind: NodeKind,
+
+    @JdbcTypeCode(SqlTypes.JSON)
+    var spec: JsonNode = JsonNodeFactory.instance.objectNode(),
 
     @Enumerated(EnumType.STRING)
     var status: NodeStatus = NodeStatus.PENDING,

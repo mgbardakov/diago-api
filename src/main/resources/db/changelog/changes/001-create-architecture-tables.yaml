@@ -64,6 +64,12 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
+                  name: spec
+                  type: jsonb
+                  defaultValueComputed: "'{}'::jsonb"
+                  constraints:
+                    nullable: false
+              - column:
                   name: status
                   type: varchar(32)
                   constraints:

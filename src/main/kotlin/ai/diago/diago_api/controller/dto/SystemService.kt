@@ -6,10 +6,12 @@ import ai.diago.diago_api.entity.Node
 import ai.diago.diago_api.entity.Relation
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import tools.jackson.databind.ObjectMapper
 
 @Service
 class SystemService(
     private val systemRepository: SystemRepository,
+    private val objectMapper: ObjectMapper,
 ) {
     @Transactional
     fun create(request: CreateSystemRequest): System {
@@ -21,6 +23,7 @@ class SystemService(
             require(name !in nodesByName) { "Node names must be unique within a system" }
 
             val node = Node(name = name, kind = requestNode.kind)
+            requestNode.spec?.let { node.spec = objectMapper.valueToTree(it) }
             node.system = system
             system.nodes.add(node)
             nodesByName[name] = node

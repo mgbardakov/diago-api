@@ -3,6 +3,7 @@ package ai.diago.diago_api.controller.dto
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Size
 import jakarta.validation.Valid
+import ai.diago.diago_api.controller.dto.validation.UniqueNodeNames
 
 data class CreateSystemRequest(
     @field:NotBlank
@@ -10,7 +11,7 @@ data class CreateSystemRequest(
     val name: String,
 
     @field:Valid
-    // TODO: Add request validation to ensure node names are unique within a system.
+    @field:UniqueNodeNames
     val nodes: List<CreateNodeRequest> = emptyList(),
 
     @field:Valid

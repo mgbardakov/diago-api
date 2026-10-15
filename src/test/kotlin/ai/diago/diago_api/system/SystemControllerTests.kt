@@ -35,8 +35,24 @@ class SystemControllerTests(
                     {
                       "name": "shop",
                       "nodes": [
-                        { "name": "orders", "kind": "GENERATED_API" },
-                        { "name": "inventory", "kind": "GENERATED_API" }
+                        {
+                          "name": "orders",
+                          "kind": "GENERATED_API",
+                          "spec": {
+                            "description": "Manages orders.",
+                            "guarantees": ["Orders are created only once."],
+                            "openApi": { "openapi": "3.1.0", "paths": {} }
+                          }
+                        },
+                        {
+                          "name": "inventory",
+                          "kind": "GENERATED_API",
+                          "spec": {
+                            "description": "Manages inventory.",
+                            "guarantees": ["Availability is returned for a product."],
+                            "openApi": { "openapi": "3.1.0", "paths": {} }
+                          }
+                        }
                       ],
                       "relations": [
                         {
@@ -58,5 +74,55 @@ class SystemControllerTests(
         kotlin.test.assertEquals(1, systemRepository.count())
         kotlin.test.assertEquals(2, jdbcTemplate.queryForObject("select count(*) from node", Long::class.java))
         kotlin.test.assertEquals(1, jdbcTemplate.queryForObject("select count(*) from relation", Long::class.java))
+    }
+
+    @Test
+    fun `rejects generated api without openapi`() {
+        mockMvc.perform(
+            post("/systems")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                    """
+                    {
+                      "name": "shop",
+                      "nodes": [
+                        {
+                          "name": "orders",
+                          "kind": "GENERATED_API",
+                          "spec": {
+                            "description": "Manages orders.",
+                            "guarantees": ["Orders are created only once."]
+                          }
+                        }
+                      ]
+                    }
+                    """.trimIndent(),
+                ),
+        )
+            .andExpect(status().isBadRequest)
+
+        kotlin.test.assertEquals(0, systemRepository.count())
+    }
+
+    @Test
+    fun `rejects duplicate node names`() {
+        mockMvc.perform(
+            post("/systems")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                    """
+                    {
+                      "name": "shop",
+                      "nodes": [
+                        { "name": "orders", "kind": "POSTGRES" },
+                        { "name": " orders ", "kind": "POSTGRES" }
+                      ]
+                    }
+                    """.trimIndent(),
+                ),
+        )
+            .andExpect(status().isBadRequest)
+
+        kotlin.test.assertEquals(0, systemRepository.count())
     }
 }
