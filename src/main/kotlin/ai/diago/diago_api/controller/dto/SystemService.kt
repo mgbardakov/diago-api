@@ -20,7 +20,6 @@ class SystemService(
 
         request.nodes.forEach { requestNode ->
             val name = requestNode.name.trim()
-            require(name !in nodesByName) { "Node names must be unique within a system" }
 
             val node = Node(name = name, kind = requestNode.kind)
             requestNode.spec?.let { node.spec = objectMapper.valueToTree(it) }
@@ -30,12 +29,8 @@ class SystemService(
         }
 
         request.relations.forEach { requestRelation ->
-            val fromNode = requireNotNull(nodesByName[requestRelation.from.trim()]) {
-                "Unknown source node: ${requestRelation.from}"
-            }
-            val toNode = requireNotNull(nodesByName[requestRelation.to.trim()]) {
-                "Unknown target node: ${requestRelation.to}"
-            }
+            val fromNode = nodesByName.getValue(requestRelation.from.trim())
+            val toNode = nodesByName.getValue(requestRelation.to.trim())
 
             val relation = Relation(
                 kind = requestRelation.kind,

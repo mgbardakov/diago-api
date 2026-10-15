@@ -4,7 +4,9 @@ import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Size
 import jakarta.validation.Valid
 import ai.diago.diago_api.controller.dto.validation.UniqueNodeNames
+import ai.diago.diago_api.controller.dto.validation.ValidSystemGraph
 
+@ValidSystemGraph
 data class CreateSystemRequest(
     @field:NotBlank
     @field:Size(max = 128)

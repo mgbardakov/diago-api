@@ -125,4 +125,29 @@ class SystemControllerTests(
 
         kotlin.test.assertEquals(0, systemRepository.count())
     }
+
+    @Test
+    fun `rejects invalid relation graph`() {
+        mockMvc.perform(
+            post("/systems")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                    """
+                    {
+                      "name": "shop",
+                      "nodes": [
+                        { "name": "orders", "kind": "POSTGRES" },
+                        { "name": "inventory", "kind": "POSTGRES" }
+                      ],
+                      "relations": [
+                        { "from": "orders", "to": "inventory", "kind": "REST" }
+                      ]
+                    }
+                    """.trimIndent(),
+                ),
+        )
+            .andExpect(status().isBadRequest)
+
+        kotlin.test.assertEquals(0, systemRepository.count())
+    }
 }
