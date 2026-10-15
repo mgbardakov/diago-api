@@ -1,5 +1,6 @@
 package ai.diago.diago_api.controller.dto
 
+import ai.diago.diago_api.entity.RelationKind
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Size
 import tools.jackson.databind.JsonNode
@@ -14,9 +15,7 @@ data class CreateRelationRequest(
     @field:Size(max = 128)
     val to: String,
 
-    @field:NotBlank
-    @field:Size(max = 64)
-    val kind: String,
+    val kind: RelationKind,
 
     val details: JsonNode = JsonNodeFactory.instance.objectNode(),
 )

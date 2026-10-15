@@ -22,7 +22,8 @@ class Node(
 
     var name: String = "",
 
-    var kind: String = "",
+    @Enumerated(EnumType.STRING)
+    var kind: NodeKind,
 
     @Enumerated(EnumType.STRING)
     var status: NodeStatus = NodeStatus.PENDING,

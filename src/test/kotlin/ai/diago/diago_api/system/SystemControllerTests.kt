@@ -35,14 +35,14 @@ class SystemControllerTests(
                     {
                       "name": "shop",
                       "nodes": [
-                        { "name": "orders", "kind": "service" },
-                        { "name": "inventory", "kind": "service" }
+                        { "name": "orders", "kind": "GENERATED_API" },
+                        { "name": "inventory", "kind": "GENERATED_API" }
                       ],
                       "relations": [
                         {
                           "from": "orders",
                           "to": "inventory",
-                          "kind": "http-call",
+                          "kind": "REST",
                           "details": { "operation": "getAvailability" }
                         }
                       ]

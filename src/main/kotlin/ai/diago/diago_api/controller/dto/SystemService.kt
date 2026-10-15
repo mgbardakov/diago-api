@@ -20,7 +20,7 @@ class SystemService(
             val name = requestNode.name.trim()
             require(name !in nodesByName) { "Node names must be unique within a system" }
 
-            val node = Node(name = name, kind = requestNode.kind.trim())
+            val node = Node(name = name, kind = requestNode.kind)
             node.system = system
             system.nodes.add(node)
             nodesByName[name] = node
@@ -35,7 +35,7 @@ class SystemService(
             }
 
             val relation = Relation(
-                kind = requestRelation.kind.trim(),
+                kind = requestRelation.kind,
                 details = requestRelation.details,
             )
             relation.system = system

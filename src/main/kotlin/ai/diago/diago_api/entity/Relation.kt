@@ -1,6 +1,8 @@
 package ai.diago.diago_api.entity
 
 import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
 import jakarta.persistence.FetchType
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
@@ -22,7 +24,8 @@ class Relation(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
 
-    var kind: String = "",
+    @Enumerated(EnumType.STRING)
+    var kind: RelationKind,
 
     @JdbcTypeCode(SqlTypes.JSON)
     var details: JsonNode = JsonNodeFactory.instance.objectNode(),
